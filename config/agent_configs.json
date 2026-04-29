@@ -1,0 +1,92 @@
+{
+    "vedas_agent": {
+        "id": "vedas_agent",
+        "name": "Vedas Agent",
+        "description": "Agent for spiritual wisdom from Vedic texts",
+        "connection_type": "http_api",
+        "endpoint": "http://localhost:8001/ask-vedas",
+        "headers": {"Content-Type": "application/json"},
+        "health_check": "http://localhost:8001/status",
+        "keywords": ["vedas", "spiritual", "wisdom"],
+        "patterns": ["vedas\\s+(.+)", "spiritual\\s+(.+)"],
+        "input_types": ["text", "json"],
+        "output_types": ["json"],
+        "enabled": true,
+        "created_at": "2025-07-16T15:59:09.872111"
+    },
+    "edumentor_agent": {
+        "id": "edumentor_agent",
+        "name": "EduMentor Agent",
+        "description": "Agent for educational content",
+        "connection_type": "http_api",
+        "endpoint": "http://localhost:8001/edumentor",
+        "headers": {"Content-Type": "application/json"},
+        "health_check": "http://localhost:8001/status",
+        "keywords": ["education", "learning", "study"],
+        "patterns": ["education\\s+(.+)", "learning\\s+(.+)"],
+        "input_types": ["text", "json"],
+        "output_types": ["json"],
+        "enabled": true,
+        "created_at": "2025-07-16T15:59:09.872111"
+    },
+    "wellness_agent": {
+        "id": "wellness_agent",
+        "name": "Wellness Agent",
+        "description": "Agent for wellness advice",
+        "connection_type": "http_api",
+        "endpoint": "http://localhost:8001/wellness",
+        "headers": {"Content-Type": "application/json"},
+        "health_check": "http://localhost:8001/status",
+        "keywords": ["wellness", "health", "wellbeing"],
+        "patterns": ["wellness\\s+(.+)", "health\\s+(.+)"],
+        "input_types": ["text", "json"],
+        "output_types": ["json"],
+        "enabled": true,
+        "created_at": "2025-07-16T15:59:09.872111"
+    },
+    "archive_agent": {
+        "name": "Archive Agent",
+        "description": "PDF document processing",
+        "connection_type": "python_module",
+        "module_path": "agents.archive_agent",
+        "class_name": "ArchiveAgent",
+        "input_types": ["pdf"],
+        "rl_enabled": true
+    },
+    "image_agent": {
+        "name": "Image Agent",
+        "description": "Image analysis and description",
+        "connection_type": "python_module", 
+        "module_path": "agents.image_agent",
+        "class_name": "ImageAgent",
+        "input_types": ["image"],
+        "rl_enabled": true
+    },
+    "audio_agent": {
+        "name": "Audio Agent",
+        "description": "Audio transcription and processing",
+        "connection_type": "python_module",
+        "module_path": "agents.audio_agent", 
+        "class_name": "AudioAgent",
+        "input_types": ["audio"],
+        "rl_enabled": true
+    },
+    "text_agent": {
+        "name": "Text Agent",
+        "description": "General text processing",
+        "connection_type": "python_module",
+        "module_path": "agents.text_agent",
+        "class_name": "TextAgent", 
+        "input_types": ["text"],
+        "rl_enabled": true
+    },
+    "stream_transformer_agent": {
+        "name": "Stream Transformer Agent",
+        "description": "General purpose processing",
+        "connection_type": "python_module",
+        "module_path": "agents.stream_transformer_agent",
+        "class_name": "StreamTransformerAgent",
+        "input_types": ["text", "pdf", "image", "audio"],
+        "rl_enabled": true
+    }
+}

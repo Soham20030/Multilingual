@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Summary Cards -->
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-file-text fs-1 text-primary"></i>
+                <h4 class="mt-2">{{ recent_tasks|length }}</h4>
+                <p class="text-muted mb-0">Recent Tasks</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-journal-text fs-1 text-success"></i>
+                <h4 class="mt-2">{{ nlo_stats|length }}</h4>
+                <p class="text-muted mb-0">Learning Objects</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-graph-up fs-1 text-info"></i>
+                <h4 class="mt-2" id="avgConfidence">-</h4>
+                <p class="text-muted mb-0">Avg Confidence</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-cpu fs-1 text-warning"></i>
+                <h4 class="mt-2" id="activeAgents">-</h4>
+                <p class="text-muted mb-0">Active Agents</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Tasks -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clock-history"></i> Recent Tasks
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_tasks %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Task ID</th>
+                                <th>Agent</th>
+                                <th>Input Type</th>
+                                <th>Status</th>
+                                <th>Timestamp</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in recent_tasks %}
+                            <tr>
+                                <td>
+                                    <code class="small">{{ task.task_id[:8] }}...</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ task.agent }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ task.input_type }}</span>
+                                </td>
+                                <td>
+                                    {% if task.output and not task.output.get('error') %}
+                                    <span class="badge bg-success">Success</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Error</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {% if task.timestamp %}
+                                            {% if task.timestamp is string %}
+                                                {{ task.timestamp[:16] }}
+                                            {% else %}
+                                                {{ task.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                                            {% endif %}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </small>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="viewTaskDetails('{{ task.task_id }}')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="downloadTaskNLO('{{ task.task_id }}')">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1"></i>
+                    <p class="mt-2">No recent tasks found</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- NLO Statistics -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart"></i> Subject Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if nlo_stats %}
+                <div class="mb-3">
+                    {% for stat in nlo_stats %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="flex-grow-1">
+                            <strong class="small">{{ stat._id or 'General' }}</strong>
+                            <div class="progress mt-1" style="height: 6px;">
+                                <div class="progress-bar bg-primary" 
+                                     style="width: {{ (stat.count / nlo_stats[0].count * 100) if nlo_stats else 0 }}%"></div>
+                            </div>
+                        </div>
+                        <div class="text-end ms-2">
+                            <small class="text-muted">{{ stat.count }}</small>
+                            <br>
+                            <small class="text-success">{{ "%.1f"|format(stat.avg_confidence * 100) if stat.avg_confidence else 0 }}%</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-3">
+                    <i class="bi bi-graph-up"></i>
+                    <p class="small mb-0">No statistics available</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Performance Metrics -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-speedometer2"></i> Performance Metrics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="performanceMetrics">
+                    <div class="text-center">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="small text-muted mt-2">Loading metrics...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Task Details Modal -->
+<div class="modal fade" id="taskDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="taskDetailsContent">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="downloadTaskBtn">
+                    <i class="bi bi-download"></i> Download NLO
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentTaskId = null;
+
+// Load performance metrics
+async function loadPerformanceMetrics() {
+    try {
+        const response = await fetch('/api/nlos?limit=50');
+        const nlos = await response.json();
+        
+        if (nlos.length === 0) {
+            document.getElementById('performanceMetrics').innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="bi bi-graph-up"></i>
+                    <p class="small mb-0">No data available</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Calculate metrics
+        const totalNLOs = nlos.length;
+        const avgConfidence = nlos.reduce((sum, nlo) => sum + (nlo.confidence || 0), 0) / totalNLOs;
+        const bloomLevels = {};
+        const agents = new Set();
+        
+        nlos.forEach(nlo => {
+            const level = nlo.bloom_level || 'understand';
+            bloomLevels[level] = (bloomLevels[level] || 0) + 1;
+            if (nlo.agent) agents.add(nlo.agent);
+        });
+        
+        // Update summary cards
+        document.getElementById('avgConfidence').textContent = Math.round(avgConfidence * 100) + '%';
+        document.getElementById('activeAgents').textContent = agents.size;
+        
+        // Display metrics
+        const metricsHtml = `
+            <div class="row text-center mb-3">
+                <div class="col-6">
+                    <h5 class="text-primary">${Math.round(avgConfidence * 100)}%</h5>
+                    <small class="text-muted">Avg Confidence</small>
+                </div>
+                <div class="col-6">
+                    <h5 class="text-success">${totalNLOs}</h5>
+                    <small class="text-muted">Total NLOs</small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h6 class="small fw-bold">Bloom's Taxonomy Distribution</h6>
+                ${Object.entries(bloomLevels).map(([level, count]) => `
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="small text-capitalize">${level}</span>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-2" style="width: 60px; height: 6px;">
+                                <div class="progress-bar bg-info" 
+                                     style="width: ${(count / totalNLOs * 100)}%"></div>
+                            </div>
+                            <small class="text-muted">${count}</small>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        document.getElementById('performanceMetrics').innerHTML = metricsHtml;
+        
+    } catch (error) {
+        console.error('Error loading performance metrics:', error);
+        document.getElementById('performanceMetrics').innerHTML = `
+            <div class="alert alert-danger">
+                <small>Error loading metrics</small>
+            </div>
+        `;
+    }
+}
+
+// View task details
+async function viewTaskDetails(taskId) {
+    currentTaskId = taskId;
+    const modal = new bootstrap.Modal(document.getElementById('taskDetailsModal'));
+    
+    try {
+        // Show loading state
+        document.getElementById('taskDetailsContent').innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading task details...</p>
+            </div>
+        `;
+        
+        modal.show();
+        
+        // Fetch NLO data
+        const response = await fetch(`/api/nlos`);
+        const nlos = await response.json();
+        const nlo = nlos.find(n => n.task_id === taskId);
+        
+        if (!nlo) {
+            throw new Error('Task details not found');
+        }
+        
+        // Display task details
+        const detailsHtml = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Basic Information</h6>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>Task ID:</strong></td>
+                            <td><code>${taskId}</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Agent:</strong></td>
+                            <td><span class="badge bg-primary">${nlo.agent || 'Unknown'}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Model:</strong></td>
+                            <td><span class="badge bg-secondary">${nlo.model || 'Unknown'}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Content Type:</strong></td>
+                            <td><span class="badge bg-info">${nlo.content_type || 'text'}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confidence:</strong></td>
+                            <td>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" 
+                                         style="width: ${Math.round((nlo.confidence || 0) * 100)}%"></div>
+                                </div>
+                                <small>${Math.round((nlo.confidence || 0) * 100)}%</small>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h6>Learning Attributes</h6>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>Bloom's Level:</strong></td>
+                            <td><span class="badge bg-warning text-dark">${nlo.bloom_level || 'understand'}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Difficulty:</strong></td>
+                            <td><span class="badge bg-secondary">${nlo.difficulty || 'medium'}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Subject Tag:</strong></td>
+                            <td><span class="badge bg-success">${nlo.subject_tag || 'general'}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reward:</strong></td>
+                            <td><strong class="text-primary">${(nlo.reward || 0).toFixed(3)}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Timestamp:</strong></td>
+                            <td><small class="text-muted">${formatTimestamp(nlo.timestamp)}</small></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Summary</h6>
+                    <div class="alert alert-light">
+                        ${nlo.summary || 'No summary available'}
+                    </div>
+                </div>
+            </div>
+            ${nlo.tags && nlo.tags.length > 0 ? `
+            <div class="row">
+                <div class="col-12">
+                    <h6>Tags</h6>
+                    <div>
+                        ${nlo.tags.map(tag => `<span class="badge bg-light text-dark me-1">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+            ` : ''}
+        `;
+        
+        document.getElementById('taskDetailsContent').innerHTML = detailsHtml;
+        
+    } catch (error) {
+        console.error('Error loading task details:', error);
+        document.getElementById('taskDetailsContent').innerHTML = `
+            <div class="alert alert-danger">
+                <strong>Error:</strong> ${error.message}
+            </div>
+        `;
+    }
+}
+
+// Download task NLO
+function downloadTaskNLO(taskId) {
+    window.open(`/download_nlo/${taskId}?format=json`, '_blank');
+}
+
+// Download button in modal
+document.getElementById('downloadTaskBtn').addEventListener('click', () => {
+    if (currentTaskId) {
+        downloadTaskNLO(currentTaskId);
+    }
+});
+
+// Load data when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadPerformanceMetrics();
+});
+
+// Auto-refresh every 30 seconds
+setInterval(() => {
+    loadPerformanceMetrics();
+}, 30000);
+</script>
+{% endblock %}

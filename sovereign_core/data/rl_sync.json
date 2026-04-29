@@ -1,0 +1,8 @@
+{
+  "timestamp": 1761764530.058749,
+  "policy_table": {},
+  "adapter_deltas": {},
+  "reward_history": [],
+  "learning_rate": 0.1,
+  "exploration_rate": 0.1
+}}

@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- File Upload Section -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-cloud-upload"></i> Upload Files for Processing
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <!-- File Upload Area -->
+                    <div class="file-upload-area mb-3" id="fileUploadArea">
+                        <i class="bi bi-cloud-upload fs-1 text-muted"></i>
+                        <h6 class="mt-2">Drag & drop files here or click to browse</h6>
+                        <p class="text-muted small">Supports PDF, images (JPG, PNG), audio (WAV, MP3), and text files</p>
+                        <input type="file" id="fileInput" name="files" multiple class="d-none" accept=".pdf,.jpg,.jpeg,.png,.wav,.mp3,.txt">
+                    </div>
+                    
+                    <!-- Selected Files Display -->
+                    <div id="selectedFiles" class="mb-3" style="display: none;">
+                        <h6>Selected Files:</h6>
+                        <div id="fileList"></div>
+                    </div>
+                    
+                    <!-- Agent Selection -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="agentSelect" class="form-label">Processing Agent</label>
+                            <select class="form-select" id="agentSelect" name="agent">
+                                <option value="edumentor_agent">Edumentor Agent (General)</option>
+                                <option value="vedas_agent">Vedas Agent (Spiritual)</option>
+                                <option value="wellness_agent">Wellness Agent (Health)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="taskDescription" class="form-label">Task Description</label>
+                            <input type="text" class="form-control" id="taskDescription" name="task_description" 
+                                   placeholder="Describe what you want to analyze...">
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="bi bi-play-circle"></i> Process Files
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Processing Status -->
+        <div class="card mt-4" id="processingCard" style="display: none;">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-gear-fill"></i> Processing Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status" id="processingSpinner">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span id="processingStatus">Initializing...</span>
+                </div>
+                <div class="progress mb-2">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" id="processingProgress" style="width: 0%"></div>
+                </div>
+                <small class="text-muted" id="processingDetails">Preparing files for processing...</small>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="card mt-4" id="resultsCard" style="display: none;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-check-circle"></i> Processing Results
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="downloadResults('json')">
+                        <i class="bi bi-download"></i> JSON
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="downloadResults('pdf')">
+                        <i class="bi bi-file-pdf"></i> PDF
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Quick Stats -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-graph-up"></i> Quick Stats
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h4 class="text-primary mb-0" id="totalTasks">-</h4>
+                            <small class="text-muted">Total Tasks</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success mb-0" id="successRate">-</h4>
+                        <small class="text-muted">Success Rate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent NLOs -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-journal-text"></i> Recent Learning Objects
+                </h6>
+            </div>
+            <div class="card-body">
+                <div id="recentNLOs">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-hourglass-split"></i>
+                        <p class="small mb-0">Loading recent NLOs...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Status -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-heart-pulse"></i> System Status
+                </h6>
+            </div>
+            <div class="card-body">
+                <div id="systemStatus">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <small>Checking system health...</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentTaskId = null;
+let processingInterval = null;
+
+// File upload handling
+document.getElementById('fileUploadArea').addEventListener('click', () => {
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileUploadArea').addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.add('dragover');
+});
+
+document.getElementById('fileUploadArea').addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+});
+
+document.getElementById('fileUploadArea').addEventListener('drop', (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    document.getElementById('fileInput').files = files;
+    displaySelectedFiles(files);
+});
+
+document.getElementById('fileInput').addEventListener('change', (e) => {
+    displaySelectedFiles(e.target.files);
+});
+
+function displaySelectedFiles(files) {
+    const fileList = document.getElementById('fileList');
+    const selectedFiles = document.getElementById('selectedFiles');
+    
+    if (files.length === 0) {
+        selectedFiles.style.display = 'none';
+        return;
+    }
+    
+    selectedFiles.style.display = 'block';
+    fileList.innerHTML = '';
+    
+    Array.from(files).forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'alert alert-light d-flex justify-content-between align-items-center py-2';
+        fileItem.innerHTML = `
+            <div>
+                <i class="bi bi-file-earmark"></i>
+                <strong>${file.name}</strong>
+                <small class="text-muted">(${formatFileSize(file.size)})</small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile(${index})">
+                <i class="bi bi-x"></i>
+            </button>
+        `;
+        fileList.appendChild(fileItem);
+    });
+}
+
+function removeFile(index) {
+    const fileInput = document.getElementById('fileInput');
+    const dt = new DataTransfer();
+    const files = Array.from(fileInput.files);
+    
+    files.splice(index, 1);
+    files.forEach(file => dt.items.add(file));
+    
+    fileInput.files = dt.files;
+    displaySelectedFiles(fileInput.files);
+}
+
+// Form submission
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const files = document.getElementById('fileInput').files;
+    
+    if (files.length === 0) {
+        showToast('Please select at least one file', 'warning');
+        return;
+    }
+    
+    // Show processing card
+    document.getElementById('processingCard').style.display = 'block';
+    document.getElementById('resultsCard').style.display = 'none';
+    document.getElementById('submitBtn').disabled = true;
+    
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            currentTaskId = result.task_id;
+            showToast('Files uploaded successfully! Processing...', 'success');
+            
+            // Start polling for status updates
+            startStatusPolling(result.task_id);
+        } else {
+            throw new Error(result.error || 'Upload failed');
+        }
+    } catch (error) {
+        showToast('Upload failed: ' + error.message, 'danger');
+        document.getElementById('processingCard').style.display = 'none';
+        document.getElementById('submitBtn').disabled = false;
+    }
+});
+
+function startStatusPolling(taskId) {
+    let progress = 0;
+    const progressBar = document.getElementById('processingProgress');
+    const statusText = document.getElementById('processingStatus');
+    const detailsText = document.getElementById('processingDetails');
+    
+    processingInterval = setInterval(async () => {
+        try {
+            const response = await fetch(`/task_status/${taskId}`);
+            const status = await response.json();
+            
+            if (status.status === 'processing') {
+                progress = Math.min(progress + 10, 90);
+                progressBar.style.width = progress + '%';
+                statusText.textContent = 'Processing files...';
+                detailsText.textContent = `Processing ${status.files.length} file(s) with ${status.agent}`;
+            } else if (status.status === 'completed') {
+                clearInterval(processingInterval);
+                progressBar.style.width = '100%';
+                statusText.textContent = 'Processing completed!';
+                detailsText.textContent = `Completed in ${status.processing_time.toFixed(2)} seconds`;
+                
+                // Hide spinner and show results
+                document.getElementById('processingSpinner').style.display = 'none';
+                displayResults(status.results);
+                document.getElementById('submitBtn').disabled = false;
+                
+                showToast('Processing completed successfully!', 'success');
+            } else if (status.status === 'error') {
+                clearInterval(processingInterval);
+                statusText.textContent = 'Processing failed';
+                detailsText.textContent = status.error;
+                document.getElementById('processingSpinner').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                
+                showToast('Processing failed: ' + status.error, 'danger');
+            }
+        } catch (error) {
+            console.error('Error polling status:', error);
+        }
+    }, 1000);
+}
+
+function displayResults(results) {
+    const resultsContent = document.getElementById('resultsContent');
+    const resultsCard = document.getElementById('resultsCard');
+    
+    resultsCard.style.display = 'block';
+    resultsContent.innerHTML = '';
+    
+    results.forEach((result, index) => {
+        const resultCard = document.createElement('div');
+        resultCard.className = 'result-card border rounded p-3 mb-3';
+        
+        if (result.error) {
+            resultCard.innerHTML = `
+                <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-exclamation-triangle text-danger me-2"></i>
+                    <strong>${result.filename}</strong>
+                    <span class="badge bg-danger ms-auto">${result.input_type}</span>
+                </div>
+                <div class="alert alert-danger mb-0">
+                    <strong>Error:</strong> ${result.error}
+                </div>
+            `;
+        } else {
+            const agentOutput = result.result.agent_output || {};
+            const confidence = agentOutput.confidence || 0;
+            
+            resultCard.innerHTML = `
+                <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-file-check text-success me-2"></i>
+                    <strong>${result.filename}</strong>
+                    <span class="badge bg-primary ms-auto">${result.input_type}</span>
+                </div>
+                <div class="mb-2">
+                    <strong>Summary:</strong>
+                    <p class="mb-1">${agentOutput.result || 'No summary available'}</p>
+                </div>
+                <div class="mb-2">
+                    <strong>Confidence:</strong>
+                    <div class="progress mt-1" style="height: 8px;">
+                        <div class="progress-bar confidence-bar" role="progressbar" 
+                             style="width: ${Math.round(confidence * 100)}%"
+                             aria-valuenow="${Math.round(confidence * 100)}" 
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">${Math.round(confidence * 100)}%</small>
+                </div>
+                ${agentOutput.keywords && agentOutput.keywords.length > 0 ? `
+                <div class="mb-2">
+                    <strong>Keywords:</strong>
+                    ${agentOutput.keywords.map(keyword => `<span class="badge bg-secondary me-1">${keyword}</span>`).join('')}
+                </div>
+                ` : ''}
+            `;
+        }
+        
+        resultsContent.appendChild(resultCard);
+    });
+}
+
+function downloadResults(format) {
+    if (!currentTaskId) {
+        showToast('No results to download', 'warning');
+        return;
+    }
+    
+    window.open(`/download_nlo/${currentTaskId}?format=${format}`, '_blank');
+}
+
+// Load initial data
+async function loadInitialData() {
+    try {
+        // Load system status
+        const healthResponse = await fetch('/health');
+        const health = await healthResponse.json();
+        displaySystemStatus(health);
+        
+        // Load recent NLOs
+        const nlosResponse = await fetch('/api/nlos?limit=5');
+        const nlos = await nlosResponse.json();
+        displayRecentNLOs(nlos);
+        
+    } catch (error) {
+        console.error('Error loading initial data:', error);
+    }
+}
+
+function displaySystemStatus(health) {
+    const statusDiv = document.getElementById('systemStatus');
+    const isHealthy = health.status === 'healthy';
+    
+    statusDiv.innerHTML = `
+        <div class="d-flex align-items-center mb-2">
+            <i class="bi bi-${isHealthy ? 'check-circle text-success' : 'exclamation-triangle text-danger'} me-2"></i>
+            <span class="fw-bold">${isHealthy ? 'Healthy' : 'Unhealthy'}</span>
+        </div>
+        <div class="small">
+            <div class="d-flex justify-content-between">
+                <span>MongoDB:</span>
+                <i class="bi bi-${health.services?.mongodb ? 'check-circle text-success' : 'x-circle text-danger'}"></i>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>MCP Bridge:</span>
+                <i class="bi bi-${health.services?.mcp_bridge ? 'check-circle text-success' : 'x-circle text-danger'}"></i>
+            </div>
+        </div>
+    `;
+}
+
+function displayRecentNLOs(nlos) {
+    const nlosDiv = document.getElementById('recentNLOs');
+    
+    if (nlos.length === 0) {
+        nlosDiv.innerHTML = '<p class="text-muted small mb-0">No recent learning objects</p>';
+        return;
+    }
+    
+    nlosDiv.innerHTML = nlos.slice(0, 3).map(nlo => `
+        <div class="border-bottom pb-2 mb-2">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                    <strong class="small">${nlo.subject_tag || 'General'}</strong>
+                    <p class="small text-muted mb-1">${(nlo.summary || '').substring(0, 60)}...</p>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-light text-dark small">${nlo.bloom_level || 'understand'}</span>
+                        <small class="text-muted ms-2">${Math.round((nlo.confidence || 0) * 100)}%</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Load initial data when page loads
+document.addEventListener('DOMContentLoaded', loadInitialData);
+</script>
+{% endblock %}

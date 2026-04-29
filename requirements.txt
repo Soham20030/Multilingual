@@ -1,0 +1,187 @@
+# ============================================================================
+# BHIV SOVEREIGN AI PLATFORM - UNIFIED DEPENDENCIES
+# ============================================================================
+# This file contains all dependencies for both systems:
+# - System 1: Sovereign LM Bridge + Multilingual KSML Core
+# - System 2: BHIV Core Multi-Modal AI Processing
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# CORE ML FRAMEWORKS
+# ----------------------------------------------------------------------------
+torch==2.4.1                 # Compatible with CUDA 12.x base image
+torchvision==0.19.1          # Vision utilities (included with torch)
+torchaudio==2.4.1            # Audio processing for BHIV Core
+transformers==4.56.2         # HuggingFace Transformers (BLOOMZ, NLLB-200)
+peft==0.17.1                 # Parameter-Efficient Fine-Tuning (LoRA adapters)
+accelerate==1.10.1           # Training acceleration and device management
+bitsandbytes==0.47.0         # 8-bit quantization (optional, for memory efficiency)
+sentencepiece==0.2.1         # Tokenization (used by BLOOMZ and custom tokenizer)
+safetensors==0.6.2           # Safe tensor serialization
+sentence-transformers        # Sentence embeddings (BHIV Core)
+
+# ----------------------------------------------------------------------------
+# DATASETS & DATA PROCESSING
+# ----------------------------------------------------------------------------
+datasets==4.1.1              # HuggingFace datasets (FLORES-200, training data)
+pandas==2.3.2                # Data manipulation and analysis
+numpy==2.1.2                 # Numerical computing
+pyarrow==21.0.0              # Apache Arrow for fast data processing
+dill==0.4.0                  # Enhanced pickling for datasets
+multiprocess==0.70.16        # Multiprocessing for datasets
+xxhash==3.5.0                # Fast hashing for datasets
+
+# ----------------------------------------------------------------------------
+# WEB FRAMEWORK & API
+# ----------------------------------------------------------------------------
+fastapi==0.117.1             # Modern async web framework (both APIs use this)
+uvicorn==0.37.0              # ASGI server for FastAPI
+pydantic==2.11.9             # Data validation and settings management
+pydantic_core==2.33.2        # Pydantic core functionality
+starlette==0.48.0            # ASGI framework (FastAPI dependency)
+anyio==4.11.0                # Async I/O support
+h11==0.16.0                  # HTTP/1.1 protocol
+sniffio==1.3.1               # Async library detection
+python-multipart             # File upload support (BHIV Core)
+
+# ----------------------------------------------------------------------------
+# HTTP & NETWORKING
+# ----------------------------------------------------------------------------
+requests==2.32.5             # HTTP library (API calls, RL uploads)
+requests-toolbelt            # HTTP request helpers (BHIV Core)
+aiohttp==3.12.15             # Async HTTP client (multilingual pipeline)
+aiohappyeyeballs==2.6.1      # Fast DNS resolution for aiohttp
+aiosignal==1.4.0             # Async signal utilities
+urllib3==2.5.0               # HTTP client (requests dependency)
+certifi==2025.8.3            # SSL certificates
+idna==3.10                   # Internationalized domain names
+charset-normalizer==3.4.3    # Character encoding detection
+multidict==6.6.4             # Multi-value dictionaries
+frozenlist==1.7.0            # Frozen lists for aiohttp
+yarl==1.20.1                 # URL parsing
+propcache==0.3.2             # Property caching
+
+# ----------------------------------------------------------------------------
+# CONFIGURATION & UTILITIES
+# ----------------------------------------------------------------------------
+PyYAML==6.0.3                # YAML configuration files
+python-dotenv                # Environment variable management
+python-dateutil==2.9.0.post0 # Date/time utilities
+click==8.3.0                 # Command-line interface creation
+colorama==0.4.6              # Cross-platform colored terminal output
+tqdm==4.67.1                 # Progress bars
+
+# ----------------------------------------------------------------------------
+# LANGUAGE PROCESSING (BHIV Core)
+# ----------------------------------------------------------------------------
+langdetect==1.0.9            # Language detection (BLOOMZ system)
+langchain-core               # LangChain core (BHIV Core)
+langchain-groq               # Groq integration
+langchain-huggingface        # HuggingFace integration
+langchain-community          # Community integrations
+nltk                         # Natural Language Toolkit
+spacy                        # Advanced NLP
+
+# ----------------------------------------------------------------------------
+# FILE & STORAGE
+# ----------------------------------------------------------------------------
+huggingface-hub==0.35.1      # HuggingFace Hub (model downloads, uploads)
+filelock==3.13.1             # File-based locks
+fsspec==2024.6.1             # Filesystem abstraction
+boto3>=1.26.0                # AWS SDK (S3 uploads in RL pipeline) - OPTIONAL
+
+# ----------------------------------------------------------------------------
+# DATABASE & VECTOR STORES
+# ----------------------------------------------------------------------------
+motor                        # Async MongoDB driver (BHIV Core)
+pymongo                      # MongoDB driver (BHIV Core)
+
+# ----------------------------------------------------------------------------
+# DOCUMENT & MEDIA PROCESSING (BHIV Core)
+# ----------------------------------------------------------------------------
+pyPDF2                       # PDF processing
+pillow==11.0.0               # Python Imaging Library
+soundfile                    # Audio file I/O
+librosa                      # Audio analysis
+pydub                        # Audio manipulation
+speechrecognition            # Speech recognition
+
+# ----------------------------------------------------------------------------
+# SECURITY & AUTHENTICATION (BHIV Core)
+# ----------------------------------------------------------------------------
+python-jose[cryptography]    # JWT tokens
+passlib[bcrypt]              # Password hashing
+passlib                      # Password utilities
+
+# ----------------------------------------------------------------------------
+# SYSTEM & MONITORING
+# ----------------------------------------------------------------------------
+psutil==7.1.0                # System and process utilities
+packaging==25.0              # Package version parsing
+
+# ----------------------------------------------------------------------------
+# TEMPLATE & RENDERING
+# ----------------------------------------------------------------------------
+Jinja2==3.1.3                # Template engine
+MarkupSafe==2.1.5            # Safe string handling
+
+# ----------------------------------------------------------------------------
+# SCIENTIFIC & MATH
+# ----------------------------------------------------------------------------
+sympy==1.13.3                # Symbolic mathematics
+mpmath==1.3.0                # Multiprecision floating-point arithmetic
+networkx==3.3                # Graph algorithms
+
+# ----------------------------------------------------------------------------
+# SERIALIZATION & ENCODING
+# ----------------------------------------------------------------------------
+protobuf==6.32.1             # Protocol buffers
+attrs==25.3.0                # Classes without boilerplate
+
+# ----------------------------------------------------------------------------
+# TYPE CHECKING & ANNOTATIONS
+# ----------------------------------------------------------------------------
+typing_extensions==4.15.0    # Backported typing features
+typing-inspection==0.4.1     # Runtime type inspection
+annotated-types==0.7.0       # Annotated types support
+
+# ----------------------------------------------------------------------------
+# TIME & DATES
+# ----------------------------------------------------------------------------
+pytz==2025.2                 # Timezone definitions
+tzdata==2025.2               # Timezone data
+
+# ----------------------------------------------------------------------------
+# TEXT PROCESSING
+# ----------------------------------------------------------------------------
+regex==2025.9.18             # Advanced regular expressions
+six==1.17.0                  # Python 2/3 compatibility utilities
+
+# ----------------------------------------------------------------------------
+# TESTING (BHIV Core)
+# ----------------------------------------------------------------------------
+pytest                       # Testing framework
+pytest-asyncio               # Async testing support
+
+# ============================================================================
+# INSTALLATION NOTES
+# ============================================================================
+#
+# 1. Install PyTorch with CUDA first:
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+#
+# 2. Then install remaining packages:
+#    pip install -r requirements.txt
+#
+# 3. Install NLP models (for BHIV Core):
+#    python -m spacy download en_core_web_sm
+#
+# 4. Optional dependencies:
+#    - boto3: Only needed if using S3 upload in RL pipeline
+#    - bitsandbytes: Only for 8-bit quantization (NLLB uses FP16 on Colab)
+#
+# 5. For Google Colab training (NLLB-200):
+#    See notebooks/colab_train_nllb200.ipynb for Colab-specific setup
+#    (Uses transformers==4.35.0, peft==0.6.0 for compatibility)
+#
+# ============================================================================

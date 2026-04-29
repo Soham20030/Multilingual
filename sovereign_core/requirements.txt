@@ -1,0 +1,43 @@
+# Sovereign LM Bridge + Multilingual KSML Core Requirements
+# Author: Soham Kotkar
+# Duration: Oct 28 – Nov 2
+
+# Core FastAPI dependencies
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# Async file operations
+aiofiles>=23.2.1
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# HTTP client for MCP connectors
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# JSON handling
+orjson>=3.9.0
+
+# Logging and monitoring
+structlog>=23.2.0
+
+# Optional: S3 integration (uncomment if needed)
+# boto3>=1.34.0
+# aioboto3>=12.0.0
+
+# Optional: Qdrant integration (uncomment if needed)
+# qdrant-client>=1.7.0
+
+# Optional: HuggingFace integration (uncomment if needed)
+# transformers>=4.36.0
+# torch>=2.1.0
+
+# Development dependencies
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.7.0

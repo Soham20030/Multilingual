@@ -1,0 +1,12 @@
+# FastAPI and web server dependencies
+fastapi
+uvicorn[standard]
+pydantic
+
+# Existing training dependencies
+accelerate
+transformers
+bitsandbytes
+peft
+datasets
+pyyaml

@@ -1,0 +1,166 @@
+Soham Kotkar — Sovereign Polyglot Fusion Layer (Final
+Integration)
+Duration: 7 Days
+Objective:
+Fuse Bhavesh LM Core + Soham Polyglot Layer + Karthikeya Vaani RL-TTS into one unified
+multilingual KSML-driven inference engine.
+
+DAY-BY-DAY BREAKDOWN
+DAY 1 — Unified Inference Engine
+Deliverables:
+•
+
+/sovereign.infer endpoint
+
+•
+
+Accepts: text, lang, target_lang, tone
+
+•
+
+Runs: Bhavesh → KSML → RL → Adapter → Vaani-prep
+
+Acceptance:
+•
+
+Single call produces multilingual aligned output.
+
+DAY 2 — Multilingual Adapter Registry
+Deliverables:
+•
+
+adapters/registry.json with metadata (lang, tokens, VRAM, version)
+
+•
+
+NAS sync script
+
+•
+
+Auto-selection of adapter per language
+
+Acceptance:
+•
+
+Auto-loaded adapters for all 39 languages.
+
+DAY 3 — Cross-Language Evaluation Engine
+
+Deliverables:
+•
+
+metrics.py with BLEU, ROUGE, COMET-lite
+
+•
+
+eval_cards/<lang>.json for 20 languages
+
+Acceptance:
+•
+
+Automated accuracy report generation.
+
+DAY 4 — Vaani Prosody Multilingual Mapper
+Deliverables:
+•
+
+/compose.prosody_map
+
+•
+
+Map: language → tone → prosody_hint
+
+•
+
+Validate with Karthikeya (needs 5 test languages)
+
+Acceptance:
+•
+
+Audio output for 5 languages through Vaani RL.
+
+DAY 5 — Cross-Layer RL Loop
+Deliverables:
+•
+
+•
+
+RL updates triggered by:
+◦
+
+LM output
+
+◦
+
+KSML labels
+
+◦
+
+Vaani user feedback
+
+Episodes merged into one reward store
+
+Acceptance:
+•
+
+Unified reward table updated live.
+
+DAY 6 — 50-Language Target Preparation
+Deliverables:
+
+•
+
+Add stubs for 10 more languages (Thai, Burmese, Sinhala, Dzongkha, Tibetan, Pashto, Dari,
+Vietnamese, etc.)
+
+•
+
+Scraper templates
+
+•
+
+MCP connectors added
+
+Acceptance:
+•
+
+All 50 languages have dataset entries + connectors.
+
+DAY 7 — Deployment + Task Bank Delivery
+Deliverables:
+•
+
+Documentation
+
+•
+
+Runbook
+
+•
+
+PR to Vinayak
+
+•
+
+Full smoke suite
+
+Acceptance:
+•
+
+Vinayak validates → system ready for Gurukul/Uniguru integration.
+
+This 7-day task completes Layer 3 of the
+Sovereign Language System:
+•
+
+Layer 1: LM Core → Bhavesh
+
+•
+
+Layer 2: Polyglot Understanding → Soham
+
+•
+
+Layer 3: Multilingual TTS & Reasoning → Soham + Karthikeya
+
+

@@ -1,0 +1,256 @@
+# MCP Connectors Configuration
+# Streaming data sources for low-resource language expansion
+# Target: 18 new languages for Sovereign LM Bridge
+
+poll_interval_seconds: 30
+max_backoff_seconds: 120
+request_timeout_seconds: 15
+health_logging: true
+
+sources:
+  # ============================================
+  # INDO-ARYAN LANGUAGES (Hindi Belt Dialects)
+  # ============================================
+  
+  - id: "hf_stream:awadhi"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_awa"
+    split: "train"
+    streaming: true
+    language_code: "awa"
+    max_samples: 5000
+    
+  - id: "hf_stream:bhojpuri"
+    type: "huggingface_stream"
+    uri: "ai4bharat/IndicCorp:bhojpuri"
+    split: "train"
+    streaming: true
+    language_code: "bho"
+    max_samples: 5000
+    
+  - id: "hf_stream:magahi"
+    type: "huggingface_stream"
+    uri: "ai4bharat/IndicCorp:magahi"
+    split: "train"
+    streaming: true
+    language_code: "mag"
+    max_samples: 3000
+    
+  - id: "hf_stream:chhattisgarhi"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_hne"
+    split: "train"
+    streaming: true
+    language_code: "hne"
+    max_samples: 3000
+    
+  - id: "wiki_scrape:haryanvi"
+    type: "http_pages"
+    base_url: "https://bgw.wikipedia.org/wiki/"
+    language_code: "bgc"
+    max_pages: 200
+    
+  - id: "wiki_scrape:himachali"
+    type: "http_pages"
+    base_url: "https://hi.wikipedia.org/wiki/Category:हिमाचली_भाषा"
+    language_code: "him"
+    max_pages: 150
+    
+  - id: "wiki_scrape:pahadi"
+    type: "http_pages"
+    base_url: "https://ne.wikipedia.org/wiki/पहाडी_भाषा"
+    language_code: "pah"
+    max_pages: 150
+  
+  # ============================================
+  # SOUTH ASIAN LANGUAGES
+  # ============================================
+  
+  - id: "hf_stream:sinhala"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_si"
+    split: "train"
+    streaming: true
+    language_code: "si"
+    max_samples: 10000
+    
+  - id: "wiki_scrape:sinhala"
+    type: "http_pages"
+    base_url: "https://si.wikipedia.org/wiki/"
+    language_code: "si"
+    max_pages: 500
+    
+  - id: "hf_stream:tamil_lk"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_ta"
+    split: "train"
+    streaming: true
+    language_code: "ta_LK"
+    max_samples: 5000
+    filter_region: "Sri Lanka"
+  
+  # ============================================
+  # TIBETO-BURMAN LANGUAGES
+  # ============================================
+  
+  - id: "hf_stream:tibetan"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_bo"
+    split: "train"
+    streaming: true
+    language_code: "bo"
+    max_samples: 5000
+    
+  - id: "wiki_scrape:tibetan"
+    type: "http_pages"
+    base_url: "https://bo.wikipedia.org/wiki/"
+    language_code: "bo"
+    max_pages: 300
+    
+  - id: "hf_stream:dzongkha"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_dz"
+    split: "train"
+    streaming: true
+    language_code: "dz"
+    max_samples: 3000
+    
+  - id: "wiki_scrape:dzongkha"
+    type: "http_pages"
+    base_url: "https://dz.wikipedia.org/wiki/"
+    language_code: "dz"
+    max_pages: 200
+    
+  - id: "hf_stream:mizo"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_lus"
+    split: "train"
+    streaming: true
+    language_code: "lus"
+    max_samples: 2000
+  
+  # ============================================
+  # IRANIAN LANGUAGES
+  # ============================================
+  
+  - id: "hf_stream:pashto"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_ps"
+    split: "train"
+    streaming: true
+    language_code: "ps"
+    max_samples: 8000
+    
+  - id: "wiki_scrape:pashto"
+    type: "http_pages"
+    base_url: "https://ps.wikipedia.org/wiki/"
+    language_code: "ps"
+    max_pages: 400
+    
+  - id: "hf_stream:dari"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_prs"
+    split: "train"
+    streaming: true
+    language_code: "prs"
+    max_samples: 8000
+    
+  - id: "wiki_scrape:dari"
+    type: "http_pages"
+    base_url: "https://fa.wikipedia.org/wiki/"
+    language_code: "prs"
+    max_pages: 400
+    filter: "afghanistan"
+  
+  # ============================================
+  # SOUTHEAST ASIAN LANGUAGES
+  # ============================================
+  
+  - id: "hf_stream:vietnamese"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_vi"
+    split: "train"
+    streaming: true
+    language_code: "vi"
+    max_samples: 15000
+    
+  - id: "wiki_scrape:vietnamese"
+    type: "http_pages"
+    base_url: "https://vi.wikipedia.org/wiki/"
+    language_code: "vi"
+    max_pages: 1000
+    
+  - id: "hf_stream:thai"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_th"
+    split: "train"
+    streaming: true
+    language_code: "th"
+    max_samples: 12000
+    
+  - id: "wiki_scrape:thai"
+    type: "http_pages"
+    base_url: "https://th.wikipedia.org/wiki/"
+    language_code: "th"
+    max_pages: 800
+    
+  - id: "hf_stream:burmese"
+    type: "huggingface_stream"
+    uri: "oscar-corpus/OSCAR-2301:unshuffled_deduplicated_my"
+    split: "train"
+    streaming: true
+    language_code: "my"
+    max_samples: 8000
+    
+  - id: "wiki_scrape:burmese"
+    type: "http_pages"
+    base_url: "https://my.wikipedia.org/wiki/"
+    language_code: "my"
+    max_pages: 500
+
+  # ============================================
+  # GOVERNMENT & NEWS SOURCES (Multi-language)
+  # ============================================
+  
+  - id: "s3_raw:gov_docs_indo_aryan"
+    type: "s3"
+    bucket: "s3://gurukul-raw/lang/indo_aryan/"
+    languages: ["awa", "bho", "mag", "hne", "bgc"]
+    max_files: 100
+    
+  - id: "s3_raw:gov_docs_south_asian"
+    type: "s3"
+    bucket: "s3://gurukul-raw/lang/south_asian/"
+    languages: ["si", "ta_LK"]
+    max_files: 150
+    
+  - id: "s3_raw:gov_docs_tibeto_burman"
+    type: "s3"
+    bucket: "s3://gurukul-raw/lang/tibeto_burman/"
+    languages: ["bo", "dz", "lus"]
+    max_files: 100
+    
+  - id: "s3_raw:gov_docs_iranian"
+    type: "s3"
+    bucket: "s3://gurukul-raw/lang/iranian/"
+    languages: ["ps", "prs"]
+    max_files: 120
+    
+  - id: "s3_raw:gov_docs_southeast_asian"
+    type: "s3"
+    bucket: "s3://gurukul-raw/lang/southeast_asian/"
+    languages: ["vi", "th", "my"]
+    max_files: 200
+
+# Sink configuration (where to store collected data)
+sink:
+  path: "data/streaming/collected_samples.jsonl"
+  ensure_ascii: false
+  
+# Quality filters
+filters:
+  min_length: 10  # Minimum characters per sample
+  max_length: 5000  # Maximum characters per sample
+  remove_duplicates: true
+  language_detection: true  # Verify language matches expected code
+

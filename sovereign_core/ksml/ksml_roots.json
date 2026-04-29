@@ -1,0 +1,142 @@
+{
+  "धातु": {
+    "meaning": "root, foundation",
+    "category": "fundamental",
+    "karma_state": "sattva",
+    "intent": "educational",
+    "examples": ["धातु शब्द", "धातु रूप"]
+  },
+  "अर्थ": {
+    "meaning": "meaning, purpose",
+    "category": "semantic",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["अर्थ समझना", "अर्थ निकालना"]
+  },
+  "भाव": {
+    "meaning": "feeling, emotion",
+    "category": "emotional",
+    "karma_state": "rajas",
+    "intent": "conversational",
+    "examples": ["भाव व्यक्त करना", "भावना"]
+  },
+  "ज्ञान": {
+    "meaning": "knowledge, wisdom",
+    "category": "educational",
+    "karma_state": "sattva",
+    "intent": "educational",
+    "examples": ["ज्ञान प्राप्त करना", "ज्ञानी"]
+  },
+  "कर्म": {
+    "meaning": "action, work",
+    "category": "action",
+    "karma_state": "rajas",
+    "intent": "command",
+    "examples": ["कर्म करना", "कर्मयोग"]
+  },
+  "धर्म": {
+    "meaning": "duty, righteousness",
+    "category": "moral",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["धर्म का पालन", "धर्मशास्त्र"]
+  },
+  "मोक्ष": {
+    "meaning": "liberation, freedom",
+    "category": "spiritual",
+    "karma_state": "sattva",
+    "intent": "educational",
+    "examples": ["मोक्ष प्राप्ति", "मुक्ति"]
+  },
+  "योग": {
+    "meaning": "union, discipline",
+    "category": "spiritual",
+    "karma_state": "sattva",
+    "intent": "educational",
+    "examples": ["योग करना", "योगासन"]
+  },
+  "भक्ति": {
+    "meaning": "devotion, love",
+    "category": "emotional",
+    "karma_state": "rajas",
+    "intent": "conversational",
+    "examples": ["भक्ति भाव", "भक्त"]
+  },
+  "तपस्": {
+    "meaning": "austerity, penance",
+    "category": "spiritual",
+    "karma_state": "sattva",
+    "intent": "educational",
+    "examples": ["तपस्या", "तपस्वी"]
+  },
+  "सत्य": {
+    "meaning": "truth",
+    "category": "moral",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["सत्य बोलना", "सत्याग्रह"]
+  },
+  "अहिंसा": {
+    "meaning": "non-violence",
+    "category": "moral",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["अहिंसा का पालन", "अहिंसक"]
+  },
+  "प्रेम": {
+    "meaning": "love",
+    "category": "emotional",
+    "karma_state": "rajas",
+    "intent": "conversational",
+    "examples": ["प्रेम करना", "प्रेमी"]
+  },
+  "शांति": {
+    "meaning": "peace",
+    "category": "emotional",
+    "karma_state": "sattva",
+    "intent": "conversational",
+    "examples": ["शांति चाहना", "शांतिपूर्ण"]
+  },
+  "सेवा": {
+    "meaning": "service",
+    "category": "action",
+    "karma_state": "sattva",
+    "intent": "command",
+    "examples": ["सेवा करना", "सेवक"]
+  },
+  "शिक्षा": {
+    "meaning": "education",
+    "category": "educational",
+    "karma_state": "sattva",
+    "intent": "educational",
+    "examples": ["शिक्षा प्राप्त करना", "शिक्षक"]
+  },
+  "संस्कृति": {
+    "meaning": "culture",
+    "category": "cultural",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["संस्कृति का संरक्षण", "सांस्कृतिक"]
+  },
+  "कला": {
+    "meaning": "art",
+    "category": "creative",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["कला सीखना", "कलाकार"]
+  },
+  "संगीत": {
+    "meaning": "music",
+    "category": "creative",
+    "karma_state": "sattva",
+    "intent": "conversational",
+    "examples": ["संगीत सुनना", "संगीतकार"]
+  },
+  "प्रकृति": {
+    "meaning": "nature",
+    "category": "natural",
+    "karma_state": "sattva",
+    "intent": "explanation",
+    "examples": ["प्रकृति का संरक्षण", "प्राकृतिक"]
+  }
+}

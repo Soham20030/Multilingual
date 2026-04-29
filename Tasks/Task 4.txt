@@ -1,0 +1,339 @@
+Soham KotkarSovereign Polyglot RL
+Evolution + KSML Alignment
+Assignee: Soham Kotkar
+Duration: Nov 3 – Nov 9 (4–5 focused days)
+Goal (one line): Attach KSML semantic tags to every multilingual output, enable live RL policy
+updates from streamed MCP feedback, and publish InsightFlow telemetry — all under <1s latency
+on RTX 4050.
+
+Deliverables (must-have)
+1.
+
+KSML Aligner Service
+
+•
+
+FastAPI: POST /align.ksml → returns { text, ksml: {intent, source_lang, target_lang,
+karma_state, roots[]}, confidence }
+
+•
+
+Lightweight Sanskrit-root tagger using ksml/ksml_roots.json (lookup + heuristics).
+
+•
+
+Intent detector: rule+keyword + tiny classifier (optional).
+
+2.
+
+RL Live Policy (Bandit → PPO-ready)
+
+•
+
+Endpoints:
+◦
+
+POST /rl.feedback → {prompt, output, reward, lang, trace_id} (updates local Qtable/bandit).
+
+◦
+
+GET /rl/policy → dump current policy snapshot.
+
+•
+
+Local updates (bandit/Q-table) + episode log to NAS/S3 for cloud PPO.
+
+•
+
+CLI: python rl/collect.py --source http://…/bridge.reason --upload s3://…/episodes/.
+
+3.
+
+MCP Feedback Stream
+
+•
+
+mcp/stream_client.py pulls (prompt, target, correction) from Core/Bucket or web feeds.
+
+•
+
+Writes to data/feedback_stream.jsonl and feeds RL collect.
+
+•
+
+Supports at least 10 languages live (from your 34 set).
+
+4.
+
+Speech-Ready Composer for Vaani
+
+•
+
+POST /compose.speech_ready → { text, lang, tone, prosody_hint } mapped to Karthikeya’s
+schema.
+
+•
+
+Confirm tone keys & test 10 samples (EN/HI + 3 Indic).
+
+5.
+
+Multilingual Reasoning Bridge
+
+•
+
+POST /bridge.reason → calls Bhavesh’s /compose.final_text → runs KSML aligner → RL
+feedback → returns { final_text, ksml, prosody_hint }.
+
+•
+
+Logs to /logs/ksml_bridge.jsonl with trace_id, policy version, reward.
+
+6.
+
+InsightFlow Telemetry Hooks
+
+•
+
+Emit: latency, policy_version, reward_avg, lang_drift, cache_hit.
+
+•
+
+Fallback stub if InsightFlow offline.
+
+7.
+
+Docs + Smoke
+
+•
+
+bridge/tests/smoke_results.md across 10 languages (latency, pass/fail, ksml coverage).
+
+•
+
+README with curl examples, runbook, HDIG reflection.
+
+Non-functional constraints
+•
+
+Latency: end-to-end ≤ 2s; avg per call ≤ 1s on RTX 4050.
+
+•
+
+VRAM: ≤ 4 GB.
+
+•
+
+Security: Supabase JWT check on all POSTs; no secrets in repo.
+
+•
+
+Logs: JSONL with trace_id, user_id (if present), timestamps.
+
+•
+
+Storage: episodes to NAS/S3 (use Yaseen/Karan credentials).
+
+•
+
+KSML coverage: ≥ 85% fields populated on smoke set.
+
+Folder & files (exact)
+sovereign_core/
+
+api.py
+# FastAPI router (all
+endpoints below)
+ksml/
+aligner.py
+# intent, karma_state, roots
+ksml_roots.json
+# small dictionary + patterns
+rl/
+policy.py
+# bandit/Q-table (persist to
+disk)
+feedback_logger.py
+# writes JSONL + S3/NAS push
+collect.py
+# pulls from bridge.reason &
+posts /rl.feedback
+bridge/
+bhavesh_connector.py
+# calls /compose.final_text
+vaani_adapter.py
+# maps tone/prosody for TTS
+mcp/
+stream_client.py
+# streaming feedback source
+config.yml
+# endpoints (Core/Bucket/http/
+hf)
+logs/
+ksml_bridge.jsonl
+requirements.txt
+README.md
+scripts/run_dev.sh
+bridge/tests/smoke_results.md
+
+Endpoints (contract)
+•
+
+POST /align.ksml → { text, source_lang?, target_lang? } → { text, ksml:{intent,
+karma_state, roots[]}, confidence }
+
+•
+
+POST /compose.speech_ready → { text, lang } → { text, lang, tone, prosody_hint }
+
+•
+
+POST /rl.feedback → { prompt, output, reward, lang, trace_id } → { ok:true, policy_version
+}
+
+•
+
+GET /rl/policy → { policy_version, table_size, stats }
+
+•
+
+POST /bridge.reason → { query, lang } → { final_text, ksml, prosody_hint, latency_ms,
+trace_id }
+
+Day-by-day plan
+Day 1 — KSML Aligner + Bridge stub
+
+•
+
+Implement ksml/aligner.py (rules + tiny lookup).
+
+•
+
+Wire /align.ksml and /bridge.reason (call Bhavesh → align → log).
+
+•
+
+Log JSONL with trace_id.
+Checkpoint: 3 language smoke (EN/HI/MR).
+
+Day 2 — RL feedback + MCP stream
+•
+
+Implement rl/policy.py (bandit/Q-table), /rl.feedback, /rl/policy.
+
+•
+
+Build mcp/stream_client.py & mcp/config.yml → stream into data/feedback_stream.jsonl.
+
+•
+
+rl/collect.py pushes episodes to S3/NAS.
+Checkpoint: 100+ episodes uploaded; policy version increments visible.
+
+Day 3 — Vaani speech-ready + InsightFlow hooks
+•
+
+Implement /compose.speech_ready and confirm tone keys with Karthikeya.
+
+•
+
+Add telemetry emit (fallback stub) for latency, rewards, drift.
+
+•
+
+Optimize for <1s average latency (cache, lightweight parsing).
+Checkpoint: 10 voice-ready samples passed.
+
+Day 4 — 10-language smoke + docs
+•
+
+Run smoke across 10 languages; fill smoke_results.md (latency, ksml fields, reward deltas).
+
+•
+
+README: curl, env, run_dev.sh, integration notes.
+
+•
+
+HDIG reflection in README bottom.
+Checkpoint: Open PR to Task Bank (Vinayak) with S3 paths.
+
+Commands (copy/paste)
+# dev
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn sovereign_core.api:app --host 0.0.0.0 --port 9200 -reload
+
+# KSML align (sample)
+curl -s -X POST localhost:9200/align.ksml -H 'Content-Type:
+application/json' \
+-d '{"text":"भाषा से जु
+","source_lang":"hi"}'
+# bridge → reason
+curl -s -X POST localhost:9200/bridge.reason -H 'ContentType: application/json' \
+-d '{"query":"Explain photosynthesis briefly","lang":"en"}'
+# RL feedback (reward=+1)
+curl -s -X POST localhost:9200/rl.feedback -H 'Content-Type:
+application/json' \
+-d '{"prompt":"...", "output":"...", "reward":1,
+"lang":"en", "trace_id":"t-123"}'
+# MCP stream quick test
+python -c "from sovereign_core.mcp.stream_client import
+stream; print(next(stream('hf_stream:hi_wiki')))"
+# Episode upload
+python sovereign_core/rl/collect.py --source http://
+localhost:9200/bridge.reason \
+--upload s3://bhiv/rl_episodes/soham/
+
+Coordination
+•
+
+Bhavesh: confirm /compose.final_text contract & sample payloads.
+
+•
+
+Karthikeya: tone/prosody field mapping for /compose.speech_ready.
+
+•
+
+Yaseen / Karan: S3/NAS credentials for RL uploads; MCP connector endpoints.
+
+•
+
+Vinayak (Task Bank): PR, smoke report, S3 paths validation.
+
+Acceptance checklist
+
+•
+
+MCP stream yields live samples for ≥10 languages.
+
+•
+
+Vaani speech-ready JSON validated by Karthikeya.
+
+है
+
+RL policy updates visible and persisted; ≥200 episodes uploaded.
+
+श्न
+
+•
+
+प्र
+
+KSML tags present (intent, karma_state, roots) in 90%+ smoke outputs.
+
+ड़ा
+
+•
+
+•
+
+Avg latency ≤1s (4050), end-to-end ≤2s.
+
+•
+
+PR opened with README, smoke_results.md, HDIG reflection; Task Bank notified.
+
+

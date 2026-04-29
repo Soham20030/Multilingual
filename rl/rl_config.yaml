@@ -1,0 +1,47 @@
+# RL Pipeline Configuration
+# Configuration for episode collection and cloud logging
+
+# Model settings
+model:
+  base_model: "bigscience/bloomz-560m"
+  adapter_path: ""  # Optional adapter path
+  max_new_tokens: 64
+  temperature: 0.7
+
+# Episode collection settings
+episodes:
+  max_episodes: 10
+  env_name: "mcp-lite"
+  output_path: "rl_runs/episodes.jsonl"
+
+# Cloud logging settings
+cloud:
+  # HTTP upload (pre-signed URL)
+  upload_enabled: false
+  upload_url: ""
+  
+  # S3 upload
+  s3_enabled: false
+  s3_bucket: ""
+  s3_key: "rl_episodes/{run_id}/episodes.jsonl"
+  aws_access_key: ""
+  aws_secret_key: ""
+
+# Reward function settings
+reward:
+  length_weight: 0.4
+  quality_weight: 0.3
+  diversity_weight: 0.3
+  
+# Sample prompts for different languages
+prompts:
+  - "Translate to Hindi: Hello friend."
+  - "Write a short story in Bengali about a cat."
+  - "Explain machine learning in Tamil."
+  - "Tell me about the weather in Telugu."
+  - "Write a poem in Gujarati about nature."
+  - "Describe your day in Marathi."
+  - "Translate to Urdu: Good morning everyone."
+  - "Write a greeting in Punjabi."
+  - "Explain technology in Nepali."
+  - "Tell a joke in Odia."

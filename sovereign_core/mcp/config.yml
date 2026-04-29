@@ -1,0 +1,24 @@
+# MCP Stream configuration
+# Each connector returns a JSON array of feedback items.
+# Item schema (minimal):
+#   trace_id (str), prompt (str), response (str), correction (str|None), reward (float|int), timestamp (ISO8601)
+
+poll_interval_seconds: 5
+max_backoff_seconds: 60
+request_timeout_seconds: 10
+health_logging: true
+
+connectors:
+  - name: sample_feedback_api
+    type: http
+    url: "http://127.0.0.1:8120/feedback"
+    method: GET
+    params:
+      limit: 50
+    headers: {}
+    # Optional bearer token env var name (set value in .env)
+    auth_env_token: MCP_CONNECTOR_TOKEN_sample_feedback_api
+
+sink:
+  path: "data/feedback_stream.jsonl"
+  ensure_ascii: false

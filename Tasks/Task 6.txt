@@ -1,0 +1,478 @@
+Gurukul Live Today!
+VINAYAK — 15-MIN FULL SYSTEM TEST
+CHECKLIST
+(This is the entire Gurukul pipeline tested in
+15 minutes. No technical knowledge needed.
+You can ask Vedang, Nikhil, Karan to test as
+well. Just to see if responses are consistent.)
+⸻
+SECTION A — STARTUP CHECK (2
+minutes)
+1. Run Frontend (localhost:3000 or 5173)
+✔ Page loads
+✔ Login/Register works (even fake login is
+fine)
+✔ Dashboard opens
+2. Run Backend (localhost:8000 or as given)
+
+✔ API server running
+✔ No startup errors
+✔ LM → TTS → TTV services reachable
+
+⸻
+SECTION B — LESSON FLOW CHECK (5
+minutes)
+1. Open any subject → any lesson
+✔ Lesson text loads
+✔ Images load (if any)
+✔ Audio button visible
+✔ “Ask Doubt” visible
+✔ MCQ available (if lesson has MCQs)
+2. Press “Ask Doubt / Ask Question”
+✔ Enter any question
+✔ Response should come back
+
+✔ No errors
+✔ Response should be meaningful
+3. Press “Play Audio / Vaani”
+✔ Audio plays
+✔ No glitch
+✔ Latency < 3 seconds
+4. Press “Generate Video / TTV”
+✔ Video loads.
+✔ It may be simple — just check it loads.
+5. Try Next/Previous lesson
+✔ Smooth navigation
+✔ No broken links
+⸻
+SECTION C — GURUKUL CORE CHECK
+(4 minutes)
+1. Curriculum Generator
+
+✔ Give class + subject → Generates
+curriculum outline
+✔ No errors
+2. MCQ Generator
+✔ Ask “Generate 5 MCQs on Photosynthesis”
+✔ MCQs + answers appear
+3. Assessment Flow
+✔ Attempt quiz
+✔ Score is shown
+✔ Score stored (backend logs)
+⸻
+SECTION D — LM / TTS / TTV PIPELINE
+CHECK (4 minutes)
+Text → LM → TTS
+Ask: “Explain gravity for class 5”
+✔ LM responds
+
+✔ Click Audio → speech plays
+Text → LM → TTV
+Ask: “Show video about water cycle”
+✔ Video produced
+✔ Plays without freeze
+Language Test
+Ask in Hindi:
+क ण समझाओ”
+
+“गु
+
+✔ Response in same language
+✔ Audio in Hindi works
+
+⸻
+SECTION E — BUG REPORT (0 min,
+checklist auto-ready:
+Vinayak only marks:
+
+र्ष
+
+त्वा
+
+रु
+
+✔ Works
+
+✖ Broken
+⚠ Slow
+❓ Confusing UI
+Send list to: Me + Soham + Akash + Yashika +
+Noopur
+Total time: 15 minutes exactly.
+SYNC PLAN (ULTRA-SHORT)
+Here is the exact communication + task flow,
+simple and unstoppable.
+
+⸻
+🔄 TEAM SYNC — 5-PERSON LOOP
+1. Vinayak → Finds Issues
+
+He sends ONE message to group:
+Format:
+•
+
+✔ Works
+
+•
+
+✖ Bugs
+
+•
+
+⚠ Slow
+
+•
+
+❓ Confusing
+
+⸻
+2. Soham → Fixes LM, MCP, KSML,
+Language Issues
+Tasks he handles:
+•
+
+Wrong answers
+
+•
+
+Language not working
+
+•
+
+Audio mismatch
+
+•
+
+Lesson answer unclear
+
+•
+
+Backend crashes from LM
+
+•
+
+API integration issues
+
+Timeline: Fix inside 1–2 hours per issue.
+
+⸻
+3. Akash → Fixes API Wiring & Backend
+Routes
+He handles:
+•
+
+Wrong endpoints
+
+•
+
+Broken backend logic
+
+•
+
+Missing request / response mapping
+
+•
+
+Lesson → API not calling LM
+
+•
+
+Doubt resolution flow
+
+•
+
+Curriculum generator flow
+
+Timeline: Fix inside 1–2 hours per issue.
+
+⸻
+
+4. Noopur → Fixes TTV / Media Pipeline
+Noopur handles:
+•
+
+Video not generating
+
+•
+
+Video glitch
+
+•
+
+Video not loading in frontend
+
+•
+
+Wrong or empty output
+
+•
+
+TTV slow (optimize TTV micro-model)
+
+Timeline: Fix inside 2–4 hours per issue.
+
+⸻
+5. Yashika → Infra + Docker + Yotta
+Yashika Handles:
+•
+
+Model not running on GPU
+
+•
+
+Container errors
+
+•
+
+Build size issues
+
+•
+
+Deploy on Yotta
+
+•
+
+Logged token usage
+
+•
+
+System health under load
+
+Timeline: Fix inside 1-1:30 hours per issue.
+
+⸻
+SYNC RHYTHM FOR 8 HOURS
+Every 2 hours → 5-minute check-in
+•
+
+Vinayak posts new bugs
+
+•
+
+Others pick & fix
+
+•
+
+Confirm once resolved
+
+•
+
+No long meetings
+
+•
+
+Continue cycle
+
+⸻
+Final Goal
+By Monday 6 PM → Gurukul working end-toend → Demo ready.
+
+Every part will be:
+•
+
+Working
+
+•
+
+Stable
+
+•
+
+Clean
+
+•
+
+Fast
+
+Here is the clean solution plan for the auth issue—simple, fast, and guaranteed to work TODAY
+without breaking anything.
+Short, clear, and fully actionable for Nikhil + Akash + Yashika.
+
+AUTH FIX PLAN — FOR TODAY (Fastest +
+Zero Breakage)
+OPTION WE WILL USE: Simple Email/Password Auth (No
+Google, No OAuth)
+This is the fastest, most stable way to get Gurukul LIVE today.
+We temporarily disable Google / OAuth / Firebase confusion and use a simple form-based login that
+stores users in the backend and issues a session token.
+
+This removes:
+Google OAuth redirect issues
+
+Firebase key mismatch
+Supabase row-level permission headaches
+Vercel domain → Yotta domain CORS issues
+And gives us:
+full control
+zero external dependency
+no billing risk
+works with any frontend + backend
+deploy-ready TODAY
+
+What The Auth System Will Be Today
+(Temporary for Demo)
+1. User signs up with:
+•
+
+name
+
+•
+
+email
+
+•
+
+password
+
+2. Backend (Yotta) returns:
+{ token: "JWT_TOKEN", user_id: "xyz123" }
+
+3. Frontend saves token in localStorage.
+4. All APIs send:
+Authorization: Bearer <token>
+
+5. No Google login required. No OAuth flows.
+
+TASK BREAKDOWN (Who does what)
+
+Nikhil — Frontend Changes (1.5 hours)
+1. Disable Google Login UI
+Hide/remove button.
+2. Add simple form-based login:
+•
+
+email
+
+•
+
+password
+
+3. Call the new backend route:
+
+POST /auth/login
+4. Save token in localStorage:
+
+localStorage.setItem("gurukul_token", token)
+5. For every API request:
+Attach the Authorization header.
+
+Output:
+Working email/password login on Vercel.
+
+Akash — Backend Auth API (2 hours)
+Add 3 simple routes (FastAPI or Node):
+POST /auth/register
+•
+
+hash password (bcrypt)
+
+•
+
+store in DB (Mongo/Qdrant/Simple JSON/SQLLite — doesn’t matter today)
+
+POST /auth/login
+•
+
+verify password
+
+•
+
+return JWT
+
+GET /auth/me
+•
+
+verify token
+
+•
+
+return user object
+
+JWT Payload:
+{
+"user_id": "...",
+"role": "student"
+}
+
+JWT Lifetime:
+12 hours (demo-safe).
+Output:
+Working auth system on Yotta backend.
+
+Yashika — Yotta Deploy + CORS Fix (1 hour)
+1. Enable CORS on Backend:
+Allow origin:
+
+https://<your-vercel-app>.vercel.app
+2. Expose new /auth endpoints.
+3. Confirm login works with Postman.
+Output:
+Yotta backend ready for frontend auth.
+
+The Result
+By today evening you will have:
+✔ Frontend on Vercel
+✔ Backend on Yotta
+✔ Simple, reliable login
+✔ Token-based protection on all routes
+✔ No OAuth headaches
+
+And Gurukul is demo-ready.
+
+Why NOT OAuth today?
+Because it requires:
+•
+
+Google Console App
+
+•
+
+verified brand domain
+
+•
+
+redirect URIs
+
+•
+
+login consent screen approval
+
+•
+
+HTTPS domain
+
+•
+
+matching credentials across Yotta + Vercel
+
+= 2–5 days of configuration (not happening today).
+
+What we can do AFTER demo
+Once stable, we can add:
+•
+
+Google Login
+
+•
+
+Class-level Access
+
+•
+
+Teacher dashboards
+
+•
+
+Role-based permissions
+
+•
+
+Passwordless magic-links
+
+•
+
+Federated identity
+
+But today, we go with simple JWT-based login.
+
+

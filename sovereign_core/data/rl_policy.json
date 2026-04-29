@@ -1,0 +1,13 @@
+{
+  "policy_table": {
+    "5394:user:u1:session:s1": {
+      "state": "5394:user:u1:session:s1",
+      "action": "Gravity is a force that pulls everything towards each other. It's what keeps you on the ground and what makes things fall down. The Earth is pulling on you right now, and that's why you don't float off into space. Gravity is also what keeps the planets in our solar system moving around the sun, and what makes things weigh something. Think of it like a big hug from the Earth, always pulling you towards it.",
+      "reward": 0.7,
+      "count": 3,
+      "last_updated": 1761765308.985179
+    }
+  },
+  "adapter_deltas": {},
+  "last_updated": 1761765430.0950696
+}
